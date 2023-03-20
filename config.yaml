@@ -1,0 +1,16 @@
+---
+configs:
+  ## Fichier contenant la clé publique
+  pub_key_file: "/home/adrien/.ssh/id_rsa.pub"
+  ## URL de la box Vagrant
+  box_url: "debian/buster64"
+  ## Réseau IP des VMs
+  ip_suffixe: '192.168.60'
+  ## VMs avec leurs nom:IP
+  hosts : 
+    {
+      lb1:  '2',
+      lb2:  '3',
+      web1: '4',
+      web2: '5'
+    }

@@ -1,0 +1,40 @@
+---
+  - name: Installer les serveurs NGINX
+    hosts: web_servers
+    become: true
+    tasks:
+      - name: Installation de NGINX
+        ansible.builtin.apt:
+          name: nginx
+          state: present
+
+      - name: Insertion des fichiers
+        ansible.builtin.copy:
+          src: index.html
+          dest: /var/www/html/index.html
+
+      - name: Modification des fichiers
+        ansible.builtin.replace:
+          path: /var/www/html/index.html
+          regexp: '\[SERV\]'
+          replace: "{{ ansible_hostname }} - {{ ansible_facts.eth1.ipv4.address }}"
+
+  - name: Installer les loads balancers
+    hosts: load_balancers_servers
+    become: true
+    tasks:
+      - name: Installation de HAProxy
+        ansible.builtin.apt:
+          name: haproxy
+          state: present
+
+      - name: Modification du fichier de configuration
+        ansible.builtin.copy:
+          src: haproxy.cfg
+          dest: /etc/haproxy/haproxy.cfg
+          
+      - name: Restart HAProxy
+        ansible.builtin.systemd:
+          state: restarted
+          name: haproxy
+      
