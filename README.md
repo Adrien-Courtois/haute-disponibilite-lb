@@ -2,5 +2,9 @@
 
 ## Pré-requis
 
+### Vagrant
+
+### Ansible
+
 
 ## Utilisation
