@@ -4,10 +4,10 @@
 [web2]
 192.168.60.5
 
-[load_balancer1]
+[loadbalancer1]
 192.168.60.2
 
-[load_balancer2]
+[loadbalancer2]
 192.168.60.3
 
 [web_servers:children]
@@ -15,8 +15,8 @@ web1
 web2
 
 [load_balancers_servers:children]
-load_balancer1
-load_balancer2
+loadbalancer1
+loadbalancer2
 
 [all:vars]
 ansible_ssh_user=vagrant

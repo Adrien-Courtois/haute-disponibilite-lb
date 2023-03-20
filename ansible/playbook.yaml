@@ -8,9 +8,25 @@
           name: nginx
           state: present
 
+      - name: Installation de Netdata
+        ansible.builtin.apt:
+          name: netdata
+          state: present
+
+      - name: Modification des fichiers de configuration de Netdata
+        ansible.builtin.replace:
+          path: /etc/netdata/netdata.conf
+          regexp: '127.0.0.1'
+          replace: "{{ ansible_facts.eth1.ipv4.address }}"
+
+      - name: Restart netdata
+        ansible.builtin.systemd:
+          state: restarted
+          name: netdata
+
       - name: Insertion des fichiers
         ansible.builtin.copy:
-          src: index.html
+          src: res/index.html
           dest: /var/www/html/index.html
 
       - name: Modification des fichiers
@@ -28,13 +44,41 @@
           name: haproxy
           state: present
 
-      - name: Modification du fichier de configuration
+      - name: Copie du fichier de configuration de HAProxy
         ansible.builtin.copy:
-          src: haproxy.cfg
+          src: res/haproxy.cfg
           dest: /etc/haproxy/haproxy.cfg
-          
+
+      - name: Ajout des web serveurs au fichier de configuration
+        ansible.builtin.lineinfile:
+          path: /etc/haproxy/haproxy.cfg
+          line: "server {{ hostvars[item]['group_names'][0] }} {{ item }} check"
+          insertafter: EOF
+        with_inventory_hostnames:
+          - web_servers
+
+
       - name: Restart HAProxy
         ansible.builtin.systemd:
           state: restarted
           name: haproxy
+
+  - name: Installation du Virtual IP
+    hosts: load_balancers_servers
+    become: true
+    tasks:
+      - name: Installation de KeepAlived
+        ansible.builtin.apt:
+          name: keepalived
+          state: present
+      
+      - name: Modification du fichier de configuration de KeepAlived
+        ansible.builtin.copy:
+          src: res/keepalived.conf
+          dest: /etc/keepalived/keepalived.conf
+
+      - name: Restart KeepAlived
+        ansible.builtin.systemd:
+          state: restarted
+          name: keepalived
       
