@@ -1,5 +1,4 @@
 # Haute disponibilité
----
 
 ## Pré-requis
 
