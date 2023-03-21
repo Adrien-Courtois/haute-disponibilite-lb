@@ -81,4 +81,11 @@
         ansible.builtin.systemd:
           state: restarted
           name: keepalived
+
+      - name: Modification de la priorité dans le fichier keepalived 
+        ansible.builtin.replace:
+          path: /etc/keepalived/keepalived.conf
+          regexp: 'priority 101'
+          replace: "priority 100"
+        when: ansible_hostname != "loadbalancer1"
       
