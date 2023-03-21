@@ -3,10 +3,10 @@
 ## Pré-requis
 
 ### Vagrant
-
+L'infrastructure est composer de VM générer par Vagrant, voici la documentation de l'installation (https://developer.hashicorp.com/vagrant/downloads)
 
 ### Ansible
-
+Les serveurs sont configurés grâce à Ansible, voici la documentation de l'installation (https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
 ## Utilisation
 Configurer l'infrastructure :
