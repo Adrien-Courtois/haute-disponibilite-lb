@@ -6,7 +6,7 @@
 ini = File.read 'ansible/inventory'
 
 # Split the file into sections. Assumes only one blank line between sections
-sections = ini.scan /^\[.*?(?:\n\n|\z)/m
+sections = ini.scan /\[.*?\n\n/m
 
 # Return an array, then merge them. Use the first element from each split as the hash key. 
 hosts = sections.map do |section| 

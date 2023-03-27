@@ -1,0 +1,5 @@
+---
+  - ansible.builtin.import_playbook: "playbook/web_servers.yml"
+  - ansible.builtin.import_playbook: "playbook/load_balancers.yml"
+  - ansible.builtin.import_playbook: "playbook/virtual_ip.yml"
+...

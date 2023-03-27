@@ -1,0 +1,37 @@
+---
+  - name: Installer les serveurs NGINX
+    hosts: web_servers
+    become: true
+    tasks:
+      - name: Installation de NGINX
+        ansible.builtin.apt:
+          name: nginx
+          state: present
+
+      - name: Installation de Netdata
+        ansible.builtin.apt:
+          name: netdata
+          state: present
+
+      - name: Modification des fichiers de configuration de Netdata
+        ansible.builtin.replace:
+          path: /etc/netdata/netdata.conf
+          regexp: '127.0.0.1'
+          replace: "{{ ansible_facts.eth1.ipv4.address }}"
+
+      - name: Restart netdata
+        ansible.builtin.systemd:
+          state: restarted
+          name: netdata
+
+      - name: Insertion des fichiers
+        ansible.builtin.copy:
+          src: ../res/index.html
+          dest: /var/www/html/index.html
+
+      - name: Modification des fichiers
+        ansible.builtin.replace:
+          path: /var/www/html/index.html
+          regexp: '\[SERV\]'
+          replace: "{{ ansible_hostname }} - {{ ansible_facts.eth1.ipv4.address }}"
+...
