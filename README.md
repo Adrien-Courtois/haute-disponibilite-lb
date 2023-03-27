@@ -29,7 +29,7 @@ vagrant up
 
 Configurer les serveurs
 ```
-ansible-playbook -i ansible/inventory -D ansible/playbook.yaml
+ansible-playbook -i ansible/inventory -D ansible/main.yml
 ```
 
 Vous pouvez voir le résultat sur votre navigateur WEB à l'adresse indiquée dans le fichier `ansible/res/keepalived.conf` (par défaut http://192.168.60.100)
