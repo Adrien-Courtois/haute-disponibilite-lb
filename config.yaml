@@ -1,6 +1,0 @@
----
-configs:
-  ## Fichier contenant la clé publique
-  pub_key_file: "/home/adrien/.ssh/id_rsa.pub"
-  ## URL de la box Vagrant
-  box_url: "debian/buster64"
