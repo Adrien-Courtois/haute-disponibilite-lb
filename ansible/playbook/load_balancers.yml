@@ -2,6 +2,7 @@
   - name: Installer les loads balancers
     hosts: load_balancers_servers
     become: true
+    gather_facts: true
     tasks:
       - name: Installation de HAProxy
         ansible.builtin.apt:
@@ -16,11 +17,10 @@
       - name: Ajout des web serveurs au fichier de configuration
         ansible.builtin.lineinfile:
           path: /etc/haproxy/haproxy.cfg
-          line: "server {{ hostvars[item]['group_names'][0] }} {{ item }} check"
+          line: "server {{ hostvars[item]['group_names'][0] }} {{ item }}:80 check"
           insertafter: EOF
         with_inventory_hostnames:
           - web_servers
-
 
       - name: Restart HAProxy
         ansible.builtin.systemd:

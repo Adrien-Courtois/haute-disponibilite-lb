@@ -2,6 +2,7 @@
   - name: Installation du Virtual IP
     hosts: load_balancers_servers
     become: true
+    gather_facts: true
     tasks:
       - name: Installation de KeepAlived
         ansible.builtin.apt:
@@ -13,15 +14,22 @@
           src: ../res/keepalived.conf
           dest: /etc/keepalived/keepalived.conf
 
-      - name: Restart KeepAlived
-        ansible.builtin.systemd:
-          state: restarted
-          name: keepalived
-
       - name: Modification de la priorité dans le fichier keepalived 
         ansible.builtin.replace:
           path: /etc/keepalived/keepalived.conf
           regexp: 'priority 101'
           replace: "priority 100"
-        when: ansible_hostname != "loadbalancer1"   
+        when: ansible_hostname != "loadbalancer1"
+
+      - name: Modification de master en BACKUP dans le fichier keepalived 
+        ansible.builtin.replace:
+          path: /etc/keepalived/keepalived.conf
+          regexp: 'MASTER'
+          replace: "BACKUP"
+        when: ansible_hostname != "loadbalancer1" 
+
+      - name: Restart KeepAlived
+        ansible.builtin.systemd:
+          state: restarted
+          name: keepalived  
 ...
