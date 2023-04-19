@@ -3,6 +3,4 @@
 - ansible.builtin.import_playbook: "web_servers.yml"
 ## Installation des LoadBalancers
 - ansible.builtin.import_playbook: "load_balancers.yml"
-## Mise en place du Virtual IP
-- ansible.builtin.import_playbook: "virtual_ip.yml"
 ...
