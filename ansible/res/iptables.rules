@@ -1,0 +1,19 @@
+
+*filter
+
+# Allow unlimited traffic on loopback
+-A INPUT -i lo -j ACCEPT
+
+# Allow ESTABLISHED and RELATED packets
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+# Allow traffic on specified ports (ex: web server)
+-A INPUT -p tcp -m tcp --dport 22 -s 192.168.60.1 -j ACCEPT
+
+# Allow all for specified IPs (whitelist)
+# -A INPUT -s IP -j ACCEPT
+
+# Reject traffic other than for the rules mentioned above
+-A INPUT -j DROP
+
+COMMIT

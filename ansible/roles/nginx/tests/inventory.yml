@@ -1,0 +1,7 @@
+---
+all:
+  children:
+    web_servers:
+      hosts:
+        example_serv_1
+...

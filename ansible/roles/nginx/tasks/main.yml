@@ -1,0 +1,24 @@
+---
+- name: "NGINX | Installation"
+  become: true
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: "NGINX | Configuration"
+  become: true
+  ansible.builtin.template:
+    src: default.j2
+    dest: /etc/nginx/sites-available/default
+    mode: "0744"
+
+- name: "NGINX | Fichier"
+  become: true
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    mode: "0744"
+  notify: "NGINX | Restart"
+...
+
+# tasks file for nginx
