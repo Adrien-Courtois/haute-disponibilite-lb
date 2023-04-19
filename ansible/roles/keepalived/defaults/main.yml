@@ -1,0 +1,7 @@
+---
+keepalived_router_id: "100"
+keepalived_state: "BACKUP"
+keepalived_priority: "100"
+keepalived_interface: "eth1"
+keepalived_address: "192.168.60.100"
+# defaults file for keepalived

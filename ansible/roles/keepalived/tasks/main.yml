@@ -1,0 +1,16 @@
+---
+- name: KeepAlived | Installation
+  become: true
+  ansible.builtin.apt:
+    name: keepalived
+    state: present
+
+- name: Modification du fichier de configuration de KeepAlived
+  become: true
+  ansible.builtin.template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    mode: "0644"
+  notify: "KeepAlived | Restart"
+...
+# tasks file for keepalived

@@ -6,3 +6,7 @@
 - src: https://github.com/Adrien-Courtois/haproxy-role
   version: stable
   name: haproxy
+
+- src: https://github.com/Adrien-Courtois/keepalived-role
+  version: stable
+  name: keepalived

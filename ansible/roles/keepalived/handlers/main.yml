@@ -1,0 +1,8 @@
+---
+- name: "KeepAlived | Restart"
+  become: true
+  ansible.builtin.systemd:
+    state: restarted
+    name: keepalived
+...
+# handlers file for keepalived
