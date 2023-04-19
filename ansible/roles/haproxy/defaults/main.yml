@@ -1,0 +1,4 @@
+---
+haproxy_backends_servers:
+  web1: 192.168.60.4
+# defaults file for haproxy

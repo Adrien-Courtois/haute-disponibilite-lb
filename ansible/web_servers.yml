@@ -1,6 +1,6 @@
 ---
 - name: "NGINX"
-  hosts: webservers
+  hosts: web_servers
   roles:
     - role: 'nginx'
 ...

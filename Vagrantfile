@@ -2,18 +2,12 @@
 # vi: set ft=ruby :
 
 ### Récupération de la liste des Hosts ###
-# Read the file.
-ini = File.read 'ansible/inventory'
+require 'yaml'
+hash = YAML.load File.read('ansible/inventory/main.yml')
 
-# Split the file into sections. Assumes only one blank line between sections
-sections = ini.scan /\[.*?\n\n/m
-
-# Return an array, then merge them. Use the first element from each split as the hash key. 
-hosts = sections.map do |section| 
-  array = section.split
-  key   = array.shift.delete '[]'
-  { key => array }
-end.reduce({}, :merge)
+webservers = hash["all"]["children"]["web_servers"]["children"]
+loadbalancers = hash["all"]["children"]["load_balancers_servers"]["children"]
+cache = hash["all"]["children"]["cache_servers"]["children"]
 
 Vagrant.configure("2") do |config|
 
@@ -23,12 +17,12 @@ Vagrant.configure("2") do |config|
     SHELL
 
     ## Webservers
-    hosts['web_servers:children'].each do |name|
+    webservers.keys.each do |name|
         config.vm.define name do |machine|
             machine.vm.box = "debian/buster64" 
             machine.vm.hostname = name
             machine.vm.box_url = "debian/buster64" 
-            machine.vm.network :private_network, ip: hosts[name][0]
+            machine.vm.network :private_network, ip: webservers[name]["hosts"]
             machine.vm.provider :virtualbox do |v|
                 v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
                 v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -40,12 +34,12 @@ Vagrant.configure("2") do |config|
     end
 
     ## Load balancers
-    hosts['load_balancers_servers:children'].each do |name|
+    loadbalancers.keys.each do |name|
         config.vm.define name do |machine|
             machine.vm.box = "debian/buster64" 
             machine.vm.hostname = name
             machine.vm.box_url = "debian/buster64" 
-            machine.vm.network :private_network, ip: hosts[name][0]
+            machine.vm.network :private_network, ip: loadbalancers[name]["hosts"]
             machine.vm.provider :virtualbox do |v|
                 v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
                 v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -57,12 +51,12 @@ Vagrant.configure("2") do |config|
     end
 
     ## cache servers
-    hosts['cache_servers:children'].each do |name|
+    cache.keys.each do |name|
         config.vm.define name do |machine|
             machine.vm.box = "debian/buster64" 
             machine.vm.hostname = name
             machine.vm.box_url = "debian/buster64" 
-            machine.vm.network :private_network, ip: hosts[name][0]
+            machine.vm.network :private_network, ip: cache[name]["hosts"]
             machine.vm.provider :virtualbox do |v|
                 v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
                 v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]

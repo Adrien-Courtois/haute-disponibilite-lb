@@ -1,0 +1,17 @@
+---
+- name: "HAProxy | Installation"
+  become: true
+  ansible.builtin.apt:
+    name: haproxy
+    state: present
+
+- name: "HAProxy | Fichier de configuration"
+  become: true
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: "0744"
+  notify: "HAProxy | Restart"
+...
+
+# tasks file for haproxy

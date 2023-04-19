@@ -48,3 +48,6 @@ backend load_back
 
         # Liste des serveurs sur lesquels le load balancer redirige
         
+        {% for server_name, server_address in haproxy_backends_servers.items() %}
+server {{ server_name }} {{ server_address }}:80 check
+        {% endfor %}

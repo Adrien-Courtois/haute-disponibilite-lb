@@ -2,3 +2,7 @@
 - src: https://github.com/Adrien-Courtois/nginx-role
   version: stable
   name: nginx
+
+- src: https://github.com/Adrien-Courtois/haproxy-role
+  version: stable
+  name: haproxy
