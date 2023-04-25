@@ -50,3 +50,29 @@ Tout d'abord on créer les VM grâce à **Vagrant**, ensuite on utilise **Ansibl
 - `ansible/res/index.html` : Fichier html afficher sur les serveurs WEB
 - `ansible/res/haproxy.cfg` : Fichier de configuration de HAProxy sur les loadbalancers
 - `ansible/res/keepalived` : Fichier de configuration de keepalived (virtual IP) sur les loadbalancers
+
+Pour le serveur de cache il faut
+- `apt-get update && apt-get install git autotools-dev automake libevent-dev liblua5.3-dev build-essential -y`
+- `sed -i -e "s/# fr_FR.UTF-8.*/fr_FR.UTF-8 UTF-8/" /etc/locale.gen`
+- `dpkg-reconfigure --frontend=noninteractive locales`
+- `update-locale LANG=fr_FR.UTF-8`
+- Installer le git de la branche next de memcached ([tuto](https://github.com/memcached/memcached/wiki/Proxy)) `git clone https://github.com/memcached/memcached.git`
+- `cd memcached && git checkout next`
+- `export ACLOCAL_PATH=/usr/share/aclocal`
+- `./autogen.sh`
+- `cd vendor && ./fetch.sh && cd ..`
+- `./configure --enable-proxy`
+- `make`
+- `make test`
+- `cd .. && git clone https://github.com/memcached/memcached-proxylibs`
+- `nano memcached/example.lua`
+```
+local s = require("simple")
+
+-- by default, sends "/foo/*" to "foo" and "/bar/*" to "bar"
+pool{
+    name = "foo",
+    backends = {"127.0.0.1:11212"},
+}
+```
+- `LUA_PATH=/home/vagrant/memcached-proxylibs/lib/simple.lua ./memcached -o proxy_config=./example.lua -u vagrant`
