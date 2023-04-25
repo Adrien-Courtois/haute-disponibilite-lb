@@ -75,4 +75,4 @@ pool{
     backends = {"127.0.0.1:11212"},
 }
 ```
-- `LUA_PATH=/home/vagrant/memcached-proxylibs/lib/simple.lua ./memcached -o proxy_config=./example.lua -u vagrant`
+- Pour lancer le serveur memcached `LUA_PATH=/home/vagrant/memcached-proxylibs/lib/simple.lua ./memcached -o proxy_config=./example.lua -u vagrant`
